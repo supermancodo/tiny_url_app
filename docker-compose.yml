@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+    environment:
+      - PORT=5000
+      - PUBLIC_BACKEND_URL=http://localhost:5000
+    extra_hosts:
+      - "short_url:127.0.0.1" 
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.frontend 
+    ports:
+      - "3000:3000"
+    environment:
+      - PUBLIC_BACKEND_URL=http://localhost:5000
+    extra_hosts:
+      - "short_url:127.0.0.1"
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+
+networks:
+  default:
+   
